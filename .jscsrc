@@ -17,6 +17,7 @@
       "allowComments": true,
       "allowRegex": true
     },
+    // this caused too much noice and I do not card
    // "validateIndentation": 4,
     "validateQuoteMarks": "'",
 
