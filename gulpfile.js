@@ -16,18 +16,18 @@ gulp.task('vet', function() {
 	.pipe($.jshint.reporter('fail'));
 });
 
-gulp.task('styles', ['clean-styles'], function(){
+gulp.task('styles', ['clean-styles'], function() {
 	log('Compiling Less -> CSS');
-	
+
 	return gulp
 		.src(config.less) //TODO create in config
 		.pipe($.plumber())
 		.pipe($.less())
 		.pipe($.autoprefixer({browsers : ['last 2 version', '> 5%']}))
-		.pipe(gulp.dest(config.temp))
+		.pipe(gulp.dest(config.temp));
 });
 
-gulp.task('clean-styles', function(done){
+gulp.task('clean-styles', function(done) {
     var files = config.temp + '**/*.css';
     clean(files, done);
 });
@@ -40,7 +40,7 @@ gulp.task('less-watcher', function () {
 * functions
 */
 
-function clean(path, done){
+function clean(path, done) {
     log('Cleaning ' + $.util.colors.blue(path));
     del(path, done);
 }
