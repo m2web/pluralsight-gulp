@@ -20,7 +20,7 @@ gulp.task('styles', ['clean-styles'], function() {
 	log('Compiling Less -> CSS');
 
 	return gulp
-		.src(config.less) //TODO create in config
+		.src(config.less)
 		.pipe($.plumber())
 		.pipe($.less())
 		.pipe($.autoprefixer({browsers : ['last 2 version', '> 5%']}))
@@ -34,6 +34,26 @@ gulp.task('clean-styles', function(done) {
 
 gulp.task('less-watcher', function () {
 	gulp.watch([config.less], ['styles']);
+});
+
+gulp.task('wiredep', function() {
+	log('Wire up the bower css and js and our app js into the HTML');
+	var options = config.getWiredepDefaultOptions();
+	var wiredep = require('wiredep').stream;
+	
+	return gulp
+		.src(config.index)
+		.pipe(wiredep(options))
+		.pipe($.inject(gulp.src(config.js)))
+		.pipe(gulp.dest(config.client))
+});
+
+gulp.task('inject', ['wiredep', 'styles'], function() {
+	log('Wire up the app css into the HTML, and call wiredep');
+	return gulp
+		.src(config.index)
+		.pipe($.inject(gulp.src(config.css)))
+		.pipe(gulp.dest(config.client))
 });
 
 /**
