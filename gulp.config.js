@@ -20,7 +20,7 @@ module.exports = function () {
 			clientApp + '**/*.js',
 			'!' + clientApp + '**/*.spec.js'
 		],
-		
+
 		less : client + 'styles/styles.less',
 		/**
 		 * Bower and NPM locations
@@ -31,7 +31,7 @@ module.exports = function () {
 			ignorePath: '../..'
 		}
 	};
-	
+
 	config.getWiredepDefaultOptions = function() {
 		var options = {
 			bowerJson: config.bower.json,
@@ -39,6 +39,6 @@ module.exports = function () {
 			ignorePath: config.bower.ignorePath
 		};
 		return options;
-	}
+	};
 	return config;
 };
