@@ -102,6 +102,32 @@ gulp.task('wiredep', function() {
 		.pipe(gulp.dest(config.client));
 });
 
+gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
+	log('Wire up the app css into the HTML, and call wiredep');
+	return gulp
+		.src(config.index)
+		.pipe($.inject(gulp.src(config.css)))
+		.pipe(gulp.dest(config.client));
+});
+
+gulp.task('optimize', ['inject'], function() {
+	log('Optimizing the JavaScript, CSS, HTML....');
+
+	var assets = $.useref.assets({searchPath: './'});
+	var templateCache = config.temp + config.templateCache.file;
+	
+	return gulp
+		.src(config.index)
+		.pipe($.plumber())
+		.pipe($.inject(gulp.src(templateCache, {read: false}), {
+			starttag: '<!-- inject:templates:js -->'
+		}))
+		.pipe(assets)
+		.pipe(assets.restore())
+		.pipe($.useref())
+		.pipe(gulp.dest(config.build));
+});
+
 gulp.task('serve-dev', ['inject'], function() {
 	var isDev = true;
 
@@ -134,14 +160,6 @@ gulp.task('serve-dev', ['inject'], function() {
 		.on('exit', function() {
 			log('*** nodemon exited cleanly');
 		});
-});
-
-gulp.task('inject', ['wiredep', 'styles'], function() {
-	log('Wire up the app css into the HTML, and call wiredep');
-	return gulp
-		.src(config.index)
-		.pipe($.inject(gulp.src(config.css)))
-		.pipe(gulp.dest(config.client));
 });
 
 /**
